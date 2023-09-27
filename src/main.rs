@@ -20,7 +20,7 @@ fn add_people(mut commands: Commands) {
 fn greet_people(
     time: Res<Time>,
     mut timer: ResMut<GreetTimer>,
-    query: Query<(&Name, &Age), With<Person>>
+    query: Query<(&Name, &Age), With<Person>>,
 ) {
     if timer.0.tick(time.delta()).just_finished() {
         for (name, age) in &query {
@@ -33,11 +33,9 @@ pub struct HelloPlugin;
 
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .insert_resource(GreetTimer(Timer::from_seconds(2.0, TimerMode::Repeating)))
+        app.insert_resource(GreetTimer(Timer::from_seconds(2.0, TimerMode::Repeating)))
             .add_systems(Startup, add_people)
             .add_systems(Update, greet_people);
-
     }
 }
 
@@ -45,7 +43,5 @@ impl Plugin for HelloPlugin {
 struct GreetTimer(Timer);
 
 fn main() {
-    App::new()
-        .add_plugins((DefaultPlugins, HelloPlugin))
-        .run();
+    App::new().add_plugins((DefaultPlugins, HelloPlugin)).run();
 }
