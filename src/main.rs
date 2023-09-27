@@ -27,9 +27,19 @@ fn greet_people(query: Query<(&Name, &Age), With<Person>>) {
     }
 }
 
+pub struct HelloPlugin;
+
+impl Plugin for HelloPlugin {
+    fn build(&self, app: &mut App) {
+        app
+            .add_systems(Startup, add_people)
+            .add_systems(Update, (hello_world, greet_people));
+
+    }
+}
+
 fn main() {
     App::new()
-        .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, greet_people))
+        .add_plugins((DefaultPlugins, HelloPlugin))
         .run();
 }
